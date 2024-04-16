@@ -8,37 +8,41 @@ export class mediaImage extends LitElement {
 
   constructor() {
     super();
-
+    this.imageSrc = "";
+    this.imageAltText = "";
   }
 
   static get styles() {
     return css`
-    .article-body img{
-    border: solid 2px var(--border-primary);
-    cursor: pointer;
-    -o-transition: all ease-in .3s;
-    display: inherit;
+    .image{
+    border: solid 2px black ;
     border-radius: 8px;
+    cursor: pointer;
+    transition: all ease-in .3s;
+    display: inherit;
     margin: 32px 0;
     transition: all .3s ease-in;
-    // transition-behavior: normal;
-    transition-duration: 0.3s;
-    transition-timing-function: ease-in;
-    transition-delay: 0s;
-    transition-property: all;
     }
+    img:hover {
+
+    }
+    
     `;
   }
 
+  
   render() {
     return html`
-        
+    <div class="image">
+      <img src="${this.imageSrc}" alt="${this.imageAltText}">
+    </div>
         `;
   }
 
   static get properties() {
     return {
-      
+      imageSrc: {type: String},
+      imageAltText: {type: String}
     };
   }
 }
