@@ -10,6 +10,13 @@ export class mediaImage extends LitElement {
     super();
     this.imageSrc = "";
     this.imageAltText = "";
+    this.addEventListener("click", this.clickEvent);
+  }
+
+  clickEvent(e){
+    this.dispatchEvent(new CustomEvent("openMediaImage"), {
+      detail: "no"
+    });
   }
 
   static get styles() {
@@ -24,9 +31,9 @@ export class mediaImage extends LitElement {
     transition: all .3s ease-in;
     }
     img:hover {
-
+      transform: translate(8px,-8px);
+      box-shadow: -8px 8px #000
     }
-    
     `;
   }
 
@@ -36,7 +43,7 @@ export class mediaImage extends LitElement {
     <div class="image">
       <img src="${this.imageSrc}" alt="${this.imageAltText}">
     </div>
-        `;
+    `;
   }
 
   static get properties() {
