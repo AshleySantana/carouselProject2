@@ -10,18 +10,12 @@ export class mediaImage extends LitElement {
     super();
     this.imageSrc = "";
     this.imageAltText = "";
-    this.addEventListener("click", this.clickEvent);
-  }
-
-  clickEvent(e){
-    this.dispatchEvent(new CustomEvent("openMediaImage"), {
-      detail: "no"
-    });
+    this.addEventListener("click", this.openDialog);
   }
 
   static get styles() {
     return css`
-    .image{
+    img {
     border: solid 2px black ;
     border-radius: 8px;
     cursor: pointer;
@@ -37,7 +31,13 @@ export class mediaImage extends LitElement {
     `;
   }
 
-  
+  openDialog(e){
+    this.dispatchEvent(new CustomEvent("openDialog", {bubbles :true}), {
+      
+    });
+  }
+
+
   render() {
     return html`
     <div class="image">

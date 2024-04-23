@@ -8,6 +8,7 @@ export class imageGallery extends LitElement {
 
   constructor() {
     super();
+    this.opened = false;
 
   }
 
@@ -17,15 +18,24 @@ export class imageGallery extends LitElement {
     `;
   }
 
-  openMediaImage(e){
+
+
+  firstUpdated(){
     // this is gonna listen for the event to be triggered 
     //and send down the dom tree
     // to open play list tag
+    document.body.addEventListener("openDialog", (e) =>{
+      this.opened = true;
+    });
+    document.body.addEventListener("closeDialog", (e) =>{
+      this.opened = false;
+    });
   }
-
+  
+  
   render() {
     return html`
-      
+      ${this.opened ? html`<play-list></play-list>` : ""}
       `;
   }
 
