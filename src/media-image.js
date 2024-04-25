@@ -10,6 +10,7 @@ export class mediaImage extends DDD {
 
   constructor() {
     super();
+    this.opened = false;
     this.imageSrc = "";
     this.imageAltText = "";
     this.addEventListener("click", this.openDialog);
@@ -39,11 +40,17 @@ export class mediaImage extends DDD {
   }
 
   openDialog(e){
-    this.dispatchEvent(new CustomEvent("openDialog", {bubbles :true}), {
-      
-    });
+    const evt = new CustomEvent("media-clicked", {
+      bubbles: true,
+      composed: true,
+      cancelable: true,
+      detail: {
+      opened: true,
+      invokedBy: this.invokedBy,
+      },
+      });
+    this.dispatchEvent(evt);
   }
-
 
   render() {
     return html`
@@ -55,6 +62,7 @@ export class mediaImage extends DDD {
 
   static get properties() {
     return {
+      opened: {type: Boolean},
       imageSrc: {type: String},
       imageAltText: {type: String}
     };

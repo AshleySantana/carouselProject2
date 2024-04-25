@@ -1,5 +1,4 @@
 import { LitElement, html, css } from 'lit';
-import '@lrnwebcomponents/play-list/play-list.js';
 import { DDD } from "@lrnwebcomponents/d-d-d/d-d-d.js";
 
 export class playList extends DDD {
@@ -10,11 +9,8 @@ export class playList extends DDD {
 
   constructor() {
     super();
-    this.playListItems = [];
     this.currentSlideIndex = 0;
-    this.slides = Array.from(this.children);
-    this.showSlide(this.currentSlideIndex);
-  
+    this.slideArray = [];
   }
 
   static get styles() {
@@ -23,10 +19,31 @@ export class playList extends DDD {
     `;
   }
 
-  connectedCallback() {
-    this.addEventListener('click', () => {
-      this.nextSlide();
+  firstUpdated(){
+    //Find all the media images on the page
+    //Somehow pull all their data into an array
+    document.querySelectorAll("media-image").forEach(img => {
+      this.slideArray.push(img.getAttribute('imageSrc'));
+      this.requestUpdate();
+    })
+
+    console.log(this.slideArray);
+
+    // this is gonna listen for the event to be triggered 
+    //and send down the dom tree to open play list tag
+    document.addEventListener("media-clicked", (e) =>{
+        //Show your play-list
+        //Figure out which image was clicked
+        //Show that images content first 
+      
+      console.log(e);
     });
+
+  }
+
+  previousSlide() {
+    this.currentSlideIndex = (this.currentSlideIndex - 1) % this.slides.length;
+    this.showSlide(this.currentSlideIndex);
   }
 
   nextSlide() {
@@ -41,14 +58,16 @@ export class playList extends DDD {
   }
 
 
+
   render() {
+
     return html`
-      <dialog class="playList">
+      <dialog class="playList" open>
         <button class="exitButton">x</button>
         <div>
-          <button class="leftButton"> < </button>
-          <img class="blah" src="https://help.figma.com/hc/article_attachments/20650187664151" alt="Italian Trulli" hieght="300px" width="300px">
-          <button class="rightButton"> > </button>
+          <button @click="${this.previousSlide}"> < </button>
+          <img class="blah" src="${this.slideArray[this.currentSlideIndex]}" alt="Italian Trulli" hieght="300px" width="300px">
+          <button @click="${this.nextSlide}"> > </button>
         </div>
       </dialog>
       `;
@@ -56,7 +75,8 @@ export class playList extends DDD {
 
   static get properties() {
     return {
-      playListItems: {type: Array},
+      currentSlideIndex: {type: Number},
+      slideArray: {type: Array}, 
 
     };
   }
