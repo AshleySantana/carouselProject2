@@ -1,6 +1,8 @@
 import { LitElement, html, css } from 'lit';
+import { DDD } from "@lrnwebcomponents/d-d-d/d-d-d.js";
 
-export class mediaImage extends LitElement {
+
+export class mediaImage extends DDD {
 
   static get tag() {
     return 'media-image';
@@ -23,11 +25,16 @@ export class mediaImage extends LitElement {
     display: inherit;
     margin: 32px 0;
     transition: all .3s ease-in;
+    height: 200px;
+    width: auto;
     }
     img:hover {
       transform: translate(8px,-8px);
       box-shadow: -8px 8px #000
     }
+
+
+
     `;
   }
 

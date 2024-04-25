@@ -1,6 +1,8 @@
 import { LitElement, html, css } from 'lit';
+import '@lrnwebcomponents/play-list/play-list.js';
+import { DDD } from "@lrnwebcomponents/d-d-d/d-d-d.js";
 
-export class playList extends LitElement {
+export class playList extends DDD {
 
   static get tag() {
     return 'play-list';
@@ -9,6 +11,9 @@ export class playList extends LitElement {
   constructor() {
     super();
     this.playListItems = [];
+    this.currentSlideIndex = 0;
+    this.slides = Array.from(this.children);
+    this.showSlide(this.currentSlideIndex);
   
   }
 
@@ -16,6 +21,23 @@ export class playList extends LitElement {
     return css`
 
     `;
+  }
+
+  connectedCallback() {
+    this.addEventListener('click', () => {
+      this.nextSlide();
+    });
+  }
+
+  nextSlide() {
+    this.currentSlideIndex = (this.currentSlideIndex + 1) % this.slides.length;
+    this.showSlide(this.currentSlideIndex);
+  }
+
+  showSlide(index) {
+    this.slides.forEach((slide, i) => {
+      slide.style.display = i === index ? 'block' : 'none';
+    });
   }
 
 
