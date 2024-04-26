@@ -13,6 +13,7 @@ export class mediaImage extends DDD {
     this.opened = false;
     this.imageSrc = "";
     this.imageAltText = "";
+    this.description = "";
     this.addEventListener("click", this.openDialog);
   }
 
@@ -56,6 +57,7 @@ export class mediaImage extends DDD {
     return html`
     <div class="image">
       <img src="${this.imageSrc}" alt="${this.imageAltText}">
+      <div class="desccription">${this.description}</div>
     </div>
     `;
   }
@@ -64,7 +66,8 @@ export class mediaImage extends DDD {
     return {
       opened: {type: Boolean},
       imageSrc: {type: String},
-      imageAltText: {type: String}
+      imageAltText: {type: String},
+      description: {type: String},
     };
   }
 }

@@ -19,15 +19,25 @@ export class playList extends DDD {
     `;
   }
 
+// var data [
+//   imageSrc = 
+//   description = 
+// ]
+
+
   firstUpdated(){
+    const mediaImage = document.querySelectorAll("media-image");
+    const selectedImage = "";
+
     //Find all the media images on the page
     //Somehow pull all their data into an array
-    document.querySelectorAll("media-image").forEach(img => {
-      this.slideArray.push(img.getAttribute('imageSrc'));
+    mediaImage.forEach(img => {
+      // push each image into slideArray
+      this.slideArray.push(img.getAttribute("imageSrc"));
       this.requestUpdate();
     })
-
     console.log(this.slideArray);
+
 
     // this is gonna listen for the event to be triggered 
     //and send down the dom tree to open play list tag
@@ -35,7 +45,23 @@ export class playList extends DDD {
         //Show your play-list
         //Figure out which image was clicked
         //Show that images content first 
+
+      // add event listener for each image to see if they were clicked and then add to var
+      mediaImage.forEach(img => {
+        mediaImage.addEventListener('click', (e) => { 
+          selectedImage = mediaImage.textContent;
+        });
+      })
       
+
+      const desiredImage = ;
+      let currImageIndex = -1;
+      for(let i = 0; i < this.slideArray.length; i++){
+        if(this.slideArray[i].img.getAttribute("imageSrc")) == desiredImage){
+          desiredImage = i;
+          break;
+        }
+      }
       console.log(e);
     });
 
@@ -57,12 +83,10 @@ export class playList extends DDD {
     });
   }
 
-
-
+  //${this.firstUpdated ? open : ""}
   render() {
-
     return html`
-      <dialog class="playList" open>
+      <dialog class="playList" >
         <button class="exitButton">x</button>
         <div>
           <button @click="${this.previousSlide}"> < </button>
