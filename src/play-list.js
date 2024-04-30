@@ -11,70 +11,91 @@ export class playList extends DDD {
     super();
     this.currentSlideIndex = 0;
     this.slideArray = [];
+    this.visible = false;
   }
 
   static get styles() {
     return css`
+      .playList{
+        height: 100%;
+        width: auto;
+
+        display: flex;
+        flex-direction: column;
+        background-color: color-mix(in srgb, black 50%, #00000000); 
+
+
+        z-index: 100000;
+        position: fixed;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+      }
+
+      .blah{
+        height: 80%;
+        width: 80%;
+
+        padding-top: 32px;
+      }
+
+      .flex-row{
+        flex-direction: row;
+      }
+
+      
 
     `;
   }
 
-// var data [
-//   imageSrc = 
-//   description = 
-// ]
 
+firstUpdated(){
+  const mediaImage = document.querySelectorAll("media-image");
+  const selectedImage = "";
 
-  firstUpdated(){
-    const mediaImage = document.querySelectorAll("media-image");
-    const selectedImage = "";
+  //Find all the media images on the page
+  //Somehow pull all their data into an array
+  mediaImage.forEach(img => {
+    // push each image into slideArray
+    this.slideArray.push(img.getAttribute("imageSrc"));
+    this.requestUpdate();
+  })
+  console.log(this.slideArray);
 
-    //Find all the media images on the page
-    //Somehow pull all their data into an array
-    mediaImage.forEach(img => {
-      // push each image into slideArray
-      this.slideArray.push(img.getAttribute("imageSrc"));
-      this.requestUpdate();
-    })
-    console.log(this.slideArray);
+  // this is gonna listen for the event to be triggered 
+  //and send down the dom tree to open play list tag
+  document.addEventListener("media-clicked", (e) =>{
+    //Show your play-list
+    //Figure out which image was clicked
+    //Show that images content first 
+    var clickedURL = e.target.attributes[0].nodeValue;
+    var index = this.slideArray.indexOf(clickedURL);
 
-
-    // this is gonna listen for the event to be triggered 
-    //and send down the dom tree to open play list tag
-    document.addEventListener("media-clicked", (e) =>{
-        //Show your play-list
-        //Figure out which image was clicked
-        //Show that images content first 
-
-      // add event listener for each image to see if they were clicked and then add to var
-      mediaImage.forEach(img => {
-        mediaImage.addEventListener('click', (e) => { 
-          selectedImage = mediaImage.textContent;
-        });
-      })
-      
-
-      const desiredImage = ;
-      let currImageIndex = -1;
-      for(let i = 0; i < this.slideArray.length; i++){
-        if(this.slideArray[i].img.getAttribute("imageSrc")) == desiredImage){
-          desiredImage = i;
-          break;
-        }
-      }
-      console.log(e);
-    });
-
-  }
+    if(index != -1){
+      this.currentSlideIndex = index;
+    }
+    
+    //SHOW play list
+    this.visible = true;
+  });
+}
 
   previousSlide() {
-    this.currentSlideIndex = (this.currentSlideIndex - 1) % this.slides.length;
-    this.showSlide(this.currentSlideIndex);
+    this.currentSlideIndex -= 1;
+
+    if(this.currentSlideIndex == -1){
+      this.currentSlideIndex = this.slideArray.length - 1;
+    }
+
   }
 
   nextSlide() {
-    this.currentSlideIndex = (this.currentSlideIndex + 1) % this.slides.length;
-    this.showSlide(this.currentSlideIndex);
+    this.currentSlideIndex += 1;
+
+    if(this.currentSlideIndex == this.slideArray.length){
+      this.currentSlideIndex = 0;
+    }
   }
 
   showSlide(index) {
@@ -83,17 +104,24 @@ export class playList extends DDD {
     });
   }
 
-  //${this.firstUpdated ? open : ""}
+  closeWindow(){
+    this.visible = false;
+  }
+
   render() {
+    if(!this.visible) return html``;
+
     return html`
-      <dialog class="playList" >
-        <button class="exitButton">x</button>
-        <div>
-          <button @click="${this.previousSlide}"> < </button>
-          <img class="blah" src="${this.slideArray[this.currentSlideIndex]}" alt="Italian Trulli" hieght="300px" width="300px">
-          <button @click="${this.nextSlide}"> > </button>
+    <div class="background">
+      <dialog class="playList">
+        <button class="exitButton" @click="${this.closeWindow}">x</button>
+        <div class='flex-row'>
+          <button @click="${this.previousSlide}"> Previous </button>
+          <img class="blah" src="${this.slideArray[this.currentSlideIndex]}" alt="Italian Trulli">
+          <button @click="${this.nextSlide}"> Next </button>
         </div>
       </dialog>
+      </div>
       `;
   }
 
@@ -101,7 +129,7 @@ export class playList extends DDD {
     return {
       currentSlideIndex: {type: Number},
       slideArray: {type: Array}, 
-
+      visible: {type: Boolean, Reflect: true}, 
     };
   }
 }
